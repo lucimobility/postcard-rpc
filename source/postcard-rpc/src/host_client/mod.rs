@@ -52,26 +52,24 @@ pub(crate) mod util;
 pub mod test_channels;
 
 /// Host Error Kind
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Error)]
 pub enum HostErr<WireErr> {
     /// An error of the user-specified wire error type
+    #[error("Wire error: {0}")]
     Wire(WireErr),
     /// We got a response that didn't match the expected value or the
     /// user specified wire error type
     ///
     /// This is also (misused) to report when duplicate sequence numbers
     /// in-flight at the same time are detected.
+    #[error("Bad response")]
     BadResponse,
     /// Deserialization of the message failed
-    Postcard(postcard::Error),
+    #[error("Postcard error: {0}")]
+    Postcard(#[from] postcard::Error),
     /// The interface has been closed, and no further messages are possible
+    #[error("Closed")]
     Closed,
-}
-
-impl<T> From<postcard::Error> for HostErr<T> {
-    fn from(value: postcard::Error) -> Self {
-        Self::Postcard(value)
-    }
 }
 
 impl<T> From<WaitError> for HostErr<T> {

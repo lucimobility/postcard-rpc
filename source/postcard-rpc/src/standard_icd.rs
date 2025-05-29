@@ -12,6 +12,9 @@ use postcard_schema::schema::NamedType;
 #[cfg(feature = "use-std")]
 use postcard_schema::schema::owned::OwnedNamedType;
 
+#[cfg(feature = "use-std")]
+use thiserror::Error;
+
 /// The calculated Key for the type [`WireError`] and the path [`ERROR_PATH`]
 pub const ERROR_KEY: Key = Key::for_path::<WireError>(ERROR_PATH);
 
@@ -37,23 +40,31 @@ pub struct FrameTooShort {
 /// A protocol error that is handled outside of the normal request type, usually
 /// indicating a protocol-level error
 #[derive(Serialize, Deserialize, Schema, Debug, PartialEq)]
+#[cfg_attr(feature = "use-std", derive(Error))]
 pub enum WireError {
     /// The frame exceeded the buffering capabilities of the server
+    #[cfg_attr(feature = "use-std", error("Frame too long: {0:?}"))]
     FrameTooLong(FrameTooLong),
     /// The frame was shorter than the minimum frame size and was rejected
+    #[cfg_attr(feature = "use-std", error("Frame too short: {0:?}"))]
     FrameTooShort(FrameTooShort),
     /// Deserialization of a message failed
+    #[cfg_attr(feature = "use-std", error("Deserialization failed"))]
     DeserFailed,
     /// Serialization of a message failed, usually due to a lack of space to
     /// buffer the serialized form
+    #[cfg_attr(feature = "use-std", error("Serialization failed"))]
     SerFailed,
     /// The key associated with this request was unknown
+    #[cfg_attr(feature = "use-std", error("Unknown key"))]
     UnknownKey,
     /// The server was unable to spawn the associated handler, typically due
     /// to an exhaustion of resources
+    #[cfg_attr(feature = "use-std", error("Failed to spawn"))]
     FailedToSpawn,
     /// The provided key is below the minimum key size calculated to avoid hash
     /// collisions, and was rejected to avoid potential misunderstanding
+    #[cfg_attr(feature = "use-std", error("Key too small"))]
     KeyTooSmall,
 }
 
