@@ -13,7 +13,8 @@ cargo fmt --all --manifest-path example/workbook-host/Cargo.toml -- --check
 cargo fmt --all --manifest-path example/serial-host/Cargo.toml -- --check
 cargo fmt --all --manifest-path example/firmware/Cargo.toml -- --check
 cargo fmt --all --manifest-path example/nrf52840-serial/Cargo.toml -- --check
-cargo fmt --all --manifest-path example/esp32c6-serial/Cargo.toml -- --check
+# TODO: Re-enable once esp-hal supports embassy-executor 0.9
+# cargo fmt --all --manifest-path example/esp32c6-serial/Cargo.toml -- --check
 cargo fmt --all --manifest-path source/postcard-rpc-test/Cargo.toml -- --check
 
 # Host + STD checks
@@ -73,9 +74,10 @@ cargo build \
 cargo build \
     --manifest-path example/nrf52840-serial/Cargo.toml \
     --target thumbv7em-none-eabihf
-cargo build \
-    --manifest-path example/esp32c6-serial/Cargo.toml \
-    --target riscv32imac-unknown-none-elf
+# TODO: Re-enable once esp-hal supports embassy-executor 0.9
+# cargo build \
+#     --manifest-path example/esp32c6-serial/Cargo.toml \
+#     --target riscv32imac-unknown-none-elf
 
 # Test Project
 cargo test \
