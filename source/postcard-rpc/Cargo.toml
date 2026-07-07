@@ -114,7 +114,7 @@ optional = true
 #
 [dependencies.embassy-usb-0_5]
 package = "embassy-usb"
-version = "0.5"
+version = "0.6"
 optional = true
 
 [dependencies.embassy-usb-driver-0_2]
@@ -124,7 +124,7 @@ optional = true
 
 [dependencies.embassy-sync-0_7]
 package = "embassy-sync"
-version = "0.7"
+version = "0.8"
 optional = true
 
 [dependencies.static_cell]
